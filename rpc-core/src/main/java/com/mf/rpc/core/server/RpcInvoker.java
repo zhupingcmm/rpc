@@ -5,6 +5,8 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.mf.rpc.core.api.RpcRequest;
 import com.mf.rpc.core.api.RpcResolver;
 import com.mf.rpc.core.api.RpcResponse;
+import com.mf.rpc.core.exception.ExceptionEnum;
+import com.mf.rpc.core.exception.RpcException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,10 +31,9 @@ public class RpcInvoker {
                     .status(true)
                     .build();
         } catch (InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
             return RpcResponse.builder()
                     .status(false)
-                    .exception(e)
+                    .exception(new RpcException(ExceptionEnum.SYSTEM_ERROR))
                     .build();
         }
     }

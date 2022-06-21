@@ -10,6 +10,5 @@ public class Consumer {
         UserService userService = rpcClient.createFromRegistry(UserService.class);
         User user = userService.findById(1);
         System.out.println("user::" + user.getName());
-        Thread.sleep(1000000);
     }
 }

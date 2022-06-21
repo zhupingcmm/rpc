@@ -1,5 +1,6 @@
 package com.mf.rpc.core.api;
 
+import com.mf.rpc.core.exception.RpcException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class  RpcResponse<T> {
     private T result;
     private boolean status;
-    private Exception exception;
+    private RpcException exception;
 
 }
