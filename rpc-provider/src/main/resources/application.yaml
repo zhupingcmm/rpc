@@ -3,3 +3,6 @@ spring:
     name: rpc-consumer
 server:
   port: 8091
+zookeeper:
+  host: localhost
+  port: 2181
