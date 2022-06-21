@@ -101,7 +101,7 @@ public class RpcClient {
     }
 
     private  <T> T create(Class<T> clazz, String url, Filter ...filters){
-        // jdk 动态代理
+        // jdk 动态代理 生产代理对象
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new RpcInvocationHandler(clazz, url, filters));
     }
 
@@ -182,20 +182,21 @@ public class RpcClient {
                     .post(RequestBody.create(mediaType, body))
                     .build();
 
-            okHttpClient.newCall(req).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    System.out.println(e);
-                    countDownLatch.countDown();
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    handleResponse(response);
-                    countDownLatch.countDown();
-                }
-            });
             try {
+                // 异步执行 RPC call
+                okHttpClient.newCall(req).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        System.out.println(e);
+                        countDownLatch.countDown();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        handleResponse(response);
+                        countDownLatch.countDown();
+                    }
+                });
                 countDownLatch.await();
             } catch (InterruptedException e) {
                 throw new RpcException(ExceptionEnum.SYSTEM_ERROR);
